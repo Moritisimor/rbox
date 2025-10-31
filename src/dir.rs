@@ -13,9 +13,9 @@ pub fn ls(args: Vec<String>) {
     let mut target = String::from(".");
     let mut showhidden = false;
 
-    for i in args {
+    for i in &args[2..] {
         if !i.starts_with("-") {
-            target = i
+            target = i.clone()
         } else {
             match i.trim() {
                 "-a" => showhidden = true,
