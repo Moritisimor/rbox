@@ -4,3 +4,6 @@
 # IDE-specific
 /.vscode
 /.idea
+
+# Misc.
+/scripts

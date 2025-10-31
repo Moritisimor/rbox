@@ -11,7 +11,18 @@ pub fn crtd(args: Vec<String>) {
 
 pub fn ls(args: Vec<String>) {
     let mut target = String::from(".");
-    if args.len() > 2 { target = args[2].clone() }
+    let mut showhidden = false;
+
+    for i in args {
+        if !i.starts_with("-") {
+            target = i
+        } else {
+            match i.trim() {
+                "-a" => showhidden = true,
+                _ => { println!("Unknown flag: {}", i); return }
+            }
+        }
+    }
 
     match std::fs::read_dir(target) {
         Ok(entries) => {
@@ -26,9 +37,10 @@ pub fn ls(args: Vec<String>) {
                     Err(_) => { println!("Error while parsing entry to string!"); return }
                 };
 
-                if !entryname.starts_with(".") {
-                    println!("- {} ({})", entryname, internals::getentrytype(readentry))
+                if entryname.starts_with(".") && !showhidden {
+                    continue;
                 }
+                println!("- {} ({})", entryname, internals::getentrytype(readentry))
             }
         }
 
