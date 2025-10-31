@@ -1,5 +1,6 @@
 mod file;
 mod dir;
+pub mod internals;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -9,6 +10,6 @@ fn main() {
         "crtf" => file::crtf(args),
         "crtd" => dir::crtd(args),
         "ls" => dir::ls(args),
-        _ => { println!("Unknown command!") }
+        _ => println!("Unknown command!")
     }
 }

@@ -1,21 +1,4 @@
-use std::fs::DirEntry;
-
-fn getentrytype(entry: DirEntry) -> String {
-    match entry.file_type() {
-        Ok(readentry) => {
-            if readentry.is_dir() {
-                "Dir".to_string()
-            } else if readentry.is_file() {
-                "File".to_string()
-            } else {
-                "Symlink".to_string()
-            }
-        }
-        Err(_) => {
-            "Unknown".to_string()
-        }
-    }
-}
+use crate::internals;
 
 pub fn crtd(args: Vec<String>) {
     if args.len() < 2 { println!("Usage: crtd <directory>"); return }
@@ -39,7 +22,7 @@ pub fn ls(args: Vec<String>) {
                 let entryname = readentry.file_name().into_string().unwrap();
 
                 if !entryname.starts_with(".") {
-                    println!("- {} ({})", entryname, getentrytype(readentry))
+                    println!("- {} ({})", entryname, internals::getentrytype(readentry))
                 }
             }
         }
