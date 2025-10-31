@@ -11,15 +11,20 @@ pub fn crtd(args: Vec<String>) {
 
 pub fn ls(args: Vec<String>) {
     let mut target = String::from(".");
-    if args.len() > 2 {
-        target = args[2].clone()
-    }
+    if args.len() > 2 { target = args[2].clone() }
 
     match std::fs::read_dir(target) {
         Ok(entries) => {
             for entry in entries {
-                let readentry = entry.unwrap(); // Better error handling coming soon trust
-                let entryname = readentry.file_name().into_string().unwrap();
+                let readentry = match entry {
+                    Ok(good) => good,
+                    Err(bad) => { println!("Error while reading entry!\nError: {}", bad); return }
+                };
+
+                let entryname = match readentry.file_name().into_string() {
+                    Ok(good) => good,
+                    Err(_) => { println!("Error while parsing entry to string!"); return }
+                };
 
                 if !entryname.starts_with(".") {
                     println!("- {} ({})", entryname, internals::getentrytype(readentry))
