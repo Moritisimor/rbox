@@ -20,18 +20,14 @@ pub fn rdf(args: Vec<String>) {
     }
 
     for f in files {
-        match std::fs::File::open(f) {
+        match std::fs::read_to_string(f) {
             Err(err) => { println!("Opening {} failed!\nError: {}", f, err); return }
 
-            Ok(mut openfile) => {
-                let mut buffer = String::new();
-                match openfile.read_to_string(&mut buffer) {
-                    Err(err) => { println!("Reading to internal buffer failed!\nError: {}", err); return }
-
-                    Ok(_) => {
-                        println!("{}", buffer)
-                    }
+            Ok(content) => {
+                if content.is_empty() {
+                    println!("(Empty file)")
                 }
+                println!("{}", content)
             }
         }
     }
