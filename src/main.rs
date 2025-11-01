@@ -3,6 +3,11 @@ mod dir;
 mod env;
 pub mod internals;
 
+/* 
+The main function, basically a dispatcher which checks the first argument and calls 
+the first matching function, and, if necessary, passes on the arguments it got to
+that function.
+*/
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.len() < 2 { println!("Usage: rbox <command> <options...>"); return }

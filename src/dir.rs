@@ -1,5 +1,6 @@
 use crate::internals;
 
+// Create Directory
 pub fn crtd(args: Vec<String>) {
     if args.len() < 3 { println!("Usage: crtd <directory>"); return }
     let mut dirs: Vec<&str> = vec![];
@@ -18,6 +19,7 @@ pub fn crtd(args: Vec<String>) {
     }
 }
 
+// List entries in a directory
 pub fn ls(args: Vec<String>) {
     let mut target = ".";
     let mut showhidden = false;
