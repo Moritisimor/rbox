@@ -1,5 +1,3 @@
-use std::io::Read;
-
 pub fn crtf(args: Vec<String>) {
     if args.len() < 3 { println!("Usage: ctrf <file>"); return }
     
