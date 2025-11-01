@@ -5,17 +5,17 @@ pub fn crtd(args: Vec<String>) {
 
     match std::fs::create_dir(args[2].clone()) {
         Ok(_) => { /* Success! */ }
-        Err(err) => { println!("Could not create Directory!\nError: {}", err) }
+        Err(err) => println!("Could not create Directory!\nError: {}", err)
     }
 }
 
 pub fn ls(args: Vec<String>) {
-    let mut target = String::from(".");
+    let mut target = ".";
     let mut showhidden = false;
 
     for i in &args[2..] {
         if !i.starts_with("-") {
-            target = i.clone()
+            target = i
         } else {
             match i.trim() {
                 "-a" => showhidden = true,

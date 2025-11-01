@@ -8,6 +8,7 @@ fn main() {
 
     match args[1].trim() {
         "crtf" => file::crtf(args),
+        "rdf" => file::rdf(args),
         "crtd" => dir::crtd(args),
         "ls" => dir::ls(args),
         _ => println!("Unknown command!")
