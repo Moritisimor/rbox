@@ -2,10 +2,19 @@ use crate::internals;
 
 pub fn crtd(args: Vec<String>) {
     if args.len() < 2 { println!("Usage: crtd <directory>"); return }
+    let mut dirs: Vec<&str> = vec![];
 
-    match std::fs::create_dir(args[2].clone()) {
-        Ok(_) => { /* Success! */ }
-        Err(err) => println!("Could not create Directory!\nError: {}", err)
+    for arg in &args[2..] {
+        if !arg.starts_with("-") {
+            dirs.push(&arg);
+        }
+    }
+
+    for dir in dirs {
+        if let Err(err) = std::fs::create_dir(dir) {
+            println!("Could not create Directory!\nError: {}", err);
+            return;
+        }
     }
 }
 
@@ -25,6 +34,7 @@ pub fn ls(args: Vec<String>) {
     }
 
     match std::fs::read_dir(target) {
+        Err(err) => println!("Could not read Directory!\nError: {}", err),
         Ok(entries) => {
             for entry in entries {
                 let readentry = match entry {
@@ -43,7 +53,5 @@ pub fn ls(args: Vec<String>) {
                 println!("- {} ({})", entryname, internals::getentrytype(readentry))
             }
         }
-
-        Err(err) => println!("Could not read Directory!\nError: {}", err)
     }
 }

@@ -11,8 +11,6 @@ pub fn getentrytype(entry: DirEntry) -> String {
                 "Symlink".to_string()
             }
         }
-        Err(_) => {
-            "Unknown".to_string()
-        }
+        Err(_) => "Unknown".to_string()
     }
 }
