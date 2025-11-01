@@ -1,5 +1,6 @@
 mod file;
 mod dir;
+mod env;
 pub mod internals;
 
 fn main() {
@@ -7,6 +8,7 @@ fn main() {
     if args.len() < 2 { println!("Usage: rbox <command> <options...>"); return }
 
     match args[1].trim() {
+        "whereami" => env::whereami(),
         "crtf" => file::crtf(args),
         "rdf" => file::rdf(args),
         "crtd" => dir::crtd(args),
