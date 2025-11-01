@@ -1,8 +1,17 @@
 pub fn crtf(args: Vec<String>) {
     if args.len() < 3 { println!("Usage: ctrf <file>"); return }
+    let mut files: Vec<&str> = vec![];
+
+    for arg in &args {
+        if !arg.starts_with("-") {
+            files.push(&arg);
+        }
+    }
     
-    if let Err(err) = std::fs::File::create_new(args[2].clone()) {
-        println!("Could not create file!\nError: {}", err)
+    for file in files {
+        if let Err(err) = std::fs::File::create_new(file) {
+            println!("Could not create file!\nError: {}", err)
+        }
     }
 }
 
