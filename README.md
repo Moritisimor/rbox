@@ -24,14 +24,14 @@ This command reads one or more files.
 ```console
 rbox crtf myfile.txt
 ```
-This command creates a file.
+This command creates one or more files.
 
 ---
 ```crtd``` (Create Directory)
 ```console
 rbox crtd mydirectory
 ```
-This command creates a directory.
+This command creates one or more directories.
 
 ---
 ```ls``` (List)
@@ -40,4 +40,4 @@ rbox ls
 ```
 This command lists entries in a directory. No parameters means that ls will use the current directory.
 
-
+It also has an optional ```-a``` flag, which makes it show hidden files (those starting with a '.').
