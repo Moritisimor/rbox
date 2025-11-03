@@ -1,6 +1,7 @@
 mod file;
 mod dir;
 mod env;
+mod mcd;
 pub mod internals;
 
 /* 
@@ -18,6 +19,7 @@ fn main() {
         "rdf" => file::rdf(args),
         "crtd" => dir::crtd(args),
         "ls" => dir::ls(args),
+        "mcd" => mcd::mcd(),
         "help" => println!("Visit: https://github.com/Moritisimor/rbox"),
         _ => println!("Unknown command!")
     }

@@ -9,7 +9,7 @@ pub fn crtd(args: Vec<String>) {
         if !arg.starts_with("-") {
             dirs.push(&arg)
         }
-    }
+    } 
 
     for dir in dirs {
         if let Err(err) = std::fs::create_dir(dir) {
