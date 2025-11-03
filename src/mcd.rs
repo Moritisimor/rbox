@@ -34,7 +34,8 @@ pub fn mcd() {
             "exit" => { println!("Bye!"); return }
             "cd" => {
                 if args.len() < 2 {
-                    println!("Usage: cd <target>")
+                    println!("Usage: cd <target>");
+                    continue
                 }
 
                 if let Err(err) = std::env::set_current_dir(args[1]) {
