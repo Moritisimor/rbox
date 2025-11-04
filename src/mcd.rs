@@ -29,7 +29,7 @@ pub fn mcd() {
             continue
         }
 
-        let args: Vec<&str> = input.trim().split(" ").collect();
+        let args: Vec<&str> = input.trim().split_whitespace().collect();
         match args[0] {
             "exit" => { println!("Bye!"); return }
             "cd" => {

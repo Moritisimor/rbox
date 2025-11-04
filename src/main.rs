@@ -2,6 +2,7 @@ mod file;
 mod dir;
 mod env;
 mod mcd;
+mod rte;
 pub mod internals;
 
 /* 
@@ -14,11 +15,12 @@ fn main() {
     if args.len() < 2 { println!("Usage: rbox <command> <options...>"); return }
 
     match args[1].trim() {
+        "rte" => rte::rte(&args[2..]),
         "whereami" => env::whereami(),
-        "crtf" => file::crtf(args),
-        "rdf" => file::rdf(args),
-        "crtd" => dir::crtd(args),
-        "ls" => dir::ls(args),
+        "crtf" => file::crtf(&args[2..]),
+        "rdf" => file::rdf(&args[2..]),
+        "crtd" => dir::crtd(&args[2..]),
+        "ls" => dir::ls(&args[2..]),
         "mcd" => mcd::mcd(),
         "help" => println!("Visit: https://github.com/Moritisimor/rbox"),
         _ => println!("Unknown command!")

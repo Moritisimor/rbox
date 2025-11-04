@@ -1,9 +1,9 @@
 // Create File
-pub fn crtf(args: Vec<String>) {
-    if args.len() < 3 { println!("Usage: ctrf <file>"); return }
+pub fn crtf(args: &[String]) {
+    if args.len() < 1 { println!("Usage: ctrf <file>"); return }
     let mut files: Vec<&str> = vec![];
 
-    for arg in &args[2..] {
+    for arg in args {
         if !arg.starts_with("-") {
             files.push(&arg)
         }
@@ -17,12 +17,12 @@ pub fn crtf(args: Vec<String>) {
 }
 
 // Read File
-pub fn rdf(args: Vec<String>) {
-    if args.len() < 3 { println!("Usage: rdf <file>"); return }
+pub fn rdf(args: &[String]) {
+    if args.len() < 1 { println!("Usage: rdf <file>"); return }
 	let mut erroccur = false;
 
 	let mut files: Vec<&str> = vec![];
-    for arg in &args[2..] {
+    for arg in args {
         if !arg.starts_with("-") {
             files.push(arg);
         }

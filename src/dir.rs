@@ -1,11 +1,11 @@
 use crate::internals;
 
 // Create Directory
-pub fn crtd(args: Vec<String>) {
-    if args.len() < 3 { println!("Usage: crtd <directory>"); return }
+pub fn crtd(args: &[String]) {
+    if args.len() < 1 { println!("Usage: crtd <directory>"); return }
     let mut dirs: Vec<&str> = vec![];
 
-    for arg in &args[2..] {
+    for arg in args {
         if !arg.starts_with("-") {
             dirs.push(&arg)
         }
@@ -20,17 +20,17 @@ pub fn crtd(args: Vec<String>) {
 }
 
 // List entries in a directory
-pub fn ls(args: Vec<String>) {
+pub fn ls(args: &[String]) {
     let mut target = ".";
     let mut showhidden = false;
 
-    for i in &args[2..] {
-        if !i.starts_with("-") {
-            target = i
+    for arg in args {
+        if !arg.starts_with("-") {
+            target = arg
         } else {
-            match i.trim() {
+            match arg.trim() {
                 "-a" => showhidden = true,
-                _ => { println!("Unknown flag: {}", i); return }
+                _ => { println!("Unknown flag: {}", arg); return }
             }
         }
     }
