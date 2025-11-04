@@ -1,8 +1,9 @@
 // Create File
-pub fn crtf(args: &[String]) {
-    if args.len() < 1 { println!("Usage: ctrf <file>"); return }
-    let mut files: Vec<&str> = vec![];
+pub fn crtf(args: &[String]) -> Result<(), String>{
+    if args.len() < 1 { println!("Usage: ctrf <file>"); return Ok(()) }
+    // Not really an error since this may have just been called for the help.
 
+    let mut files: Vec<&str> = vec![];
     for arg in args {
         if !arg.starts_with("-") {
             files.push(&arg)
@@ -11,14 +12,16 @@ pub fn crtf(args: &[String]) {
     
     for file in files {
         if let Err(err) = std::fs::File::create_new(file) {
-            println!("Could not create file!\nError: {}", err)
+            return Err(err.to_string())
         }
     }
+
+    Ok(())
 }
 
 // Read File
-pub fn rdf(args: &[String]) {
-    if args.len() < 1 { println!("Usage: rdf <file>"); return }
+pub fn rdf(args: &[String]) -> Result<(), String> {
+    if args.len() < 1 { println!("Usage: rdf <file>"); return Ok(()) }
 	let mut erroccur = false;
 
 	let mut files: Vec<&str> = vec![];
@@ -36,7 +39,7 @@ pub fn rdf(args: &[String]) {
 
         match std::fs::read_to_string(f) {
             Err(err) => { 
-				eprintln!("Opening {} failed!\nError: {}\n", f, err); 
+				eprintln!("Opening {} failed! Error: {}\n", f, err); 
 				erroccur = true;
 				continue 
 			}
@@ -50,5 +53,5 @@ pub fn rdf(args: &[String]) {
         }
     }
 
-	if erroccur { std::process::exit(1) }
+	if erroccur { Err("Creating one or more files failed.".to_string()) } else { Ok(()) }
 }

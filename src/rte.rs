@@ -67,7 +67,10 @@ impl Editor {
 
         let mut buf = String::new();
         if let Err(_) = io::stdin().read_line(&mut buf) { return Err(String::from("Could not read line from Stdin.")) }
-        let index = line.parse::<usize>().expect("Error while parsing line into numer. This should NOT have happened.");
+        let index = match line.parse::<usize>() {
+            Ok(i) => i,
+            Err(_) => return Err(String::from("Error while converting index to number!"))
+        };
 
         if buf.trim().is_empty() {
             self.lines.remove(index);
@@ -75,12 +78,12 @@ impl Editor {
         }
 
         match buf.strip_suffix("\n") {
+            None => Err(String::from("Error while stripping line break from input.")),
             Some(t) => {
                 self.lines.insert(index, t.to_string());
                 self.lines.remove(index - 1);
                 Ok(())
             }
-            None => Err(String::from("Error while stripping line break from input."))
         }
     }
 
@@ -125,21 +128,18 @@ impl Editor {
 
         file.flush()?;
         self.dirty = false;
-        println!("wrote {} line/s to {}", self.lines.len(), self.filename.display());
+        println!("Wrote {} line/s to {}", self.lines.len(), self.filename.display());
         Ok(())
     }
 }
 
-pub fn rte(args: &[String]) {
-    if let None = args.get(0) {
-        println!("Usage: rte <Target File>");
-        return
-    }
+pub fn rte(args: &[String]) -> Result<(), String> {
+    if let None = args.get(0) { return Err("Usage: rte <Target File>".to_string()) }
 
     let filename = PathBuf::from(args[0].trim());
     let mut editor = match Editor::new(filename) {
         Ok(ed) => ed,
-        Err(err) => { eprintln!("Spawning Editor failed!\nError: {}", err); std::process::exit(1) }
+        Err(err) => { eprintln!("Error: {}", err); std::process::exit(1) }
     };
 
     println!("Opened {} ({} line/s)", editor.filename.display(), editor.lines.len());
@@ -149,18 +149,19 @@ pub fn rte(args: &[String]) {
     loop {
         print!("RTE >> ");
         if let Err(err) = io::stdout().flush() {
-            println!("Important: flushing stdout failed!\nError: {}\nConsider restarting RTE.", err)
+            println!("Important: flushing stdout failed!\nError: {}\nConsider restarting RTE.\n", err)
         }
 
         let mut input = String::new();
-        let n = match stdin.read_line(&mut input) {
+        match stdin.read_line(&mut input) {
             Ok(lines) => lines,
-            Err(err) => { println!("Important: Reading from stdin failed!\nError: {}\nConsider restarting RTE.", err); continue }
+            Err(err) => { 
+                println!("Important: Reading from stdin failed! Error: {}\nConsider restarting RTE.\n", err); 
+                continue 
+            }
         };
 
-        if n == 0 { break }
         if input.is_empty() { continue }
-
         let mut parts = input.trim().split_whitespace();
         let cmd = match parts.next() {
             Some(c) => c,
@@ -171,13 +172,13 @@ pub fn rte(args: &[String]) {
             "r" => {
                 let line_num = parts.next().and_then(|s| s.parse::<usize>().ok());
                 if let Err(err) = editor.read_lines(line_num) {
-                    eprintln!("Error while reading line!\nError: {}", err)
+                    eprintln!("Error: {}", err)
                 }
             }
 
             "a" => {
                 if let Err(e) = editor.append_lines() {
-                    eprintln!("Append error: {e}")
+                    eprintln!("Error: {e}")
                 }
             }
 
@@ -192,7 +193,7 @@ pub fn rte(args: &[String]) {
 
             "w" => { 
                 if let Err(e) = editor.write_file() {
-                    eprintln!("Write error: {e}")
+                    eprintln!("Error: {e}")
                 }
             }
 
@@ -200,11 +201,11 @@ pub fn rte(args: &[String]) {
                 if editor.dirty {
                     eprintln!("Buffer modified; use 'w' to save or 'q!' to quit without saving")
                 } else {
-                    break
+                    return Ok(())
                 }
             }
 
-            "q!" => break,
+            "q!" => return Ok(()),
             "h" => print_help(),
             _ => eprintln!("Unknown command '{}'; try 'h'", cmd)
         }
