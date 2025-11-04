@@ -139,7 +139,10 @@ pub fn rte(args: &[String]) -> Result<(), String> {
     let filename = PathBuf::from(args[0].trim());
     let mut editor = match Editor::new(filename) {
         Ok(ed) => ed,
-        Err(err) => { eprintln!("Error: {}", err); std::process::exit(1) }
+        Err(err) => { 
+            eprintln!("Error: {}", err); 
+            std::process::exit(1) 
+        }
     };
 
     println!("Opened {} ({} line/s)", editor.filename.display(), editor.lines.len());

@@ -2,9 +2,12 @@ use crate::internals;
 
 // Create Directory
 pub fn crtd(args: &[String]) -> Result<(), String>{
-    if args.len() < 1 { println!("Usage: crtd <directory>"); return Ok(()) }
-    let mut dirs: Vec<&str> = vec![];
+    if args.len() < 1 { 
+        println!("Usage: crtd <directory>"); 
+        return Ok(()) 
+    }
 
+    let mut dirs: Vec<&str> = vec![];
     for arg in args {
         if !arg.starts_with("-") {
             dirs.push(&arg)
@@ -12,7 +15,9 @@ pub fn crtd(args: &[String]) -> Result<(), String>{
     } 
 
     for dir in dirs {
-        if let Err(err) = std::fs::create_dir(dir) { return Err(err.to_string()) }
+        if let Err(err) = std::fs::create_dir(dir) { 
+            return Err(err.to_string()) 
+        }
     }
 
     Ok(())

@@ -21,9 +21,12 @@ pub fn crtf(args: &[String]) -> Result<(), String>{
 
 // Read File
 pub fn rdf(args: &[String]) -> Result<(), String> {
-    if args.len() < 1 { println!("Usage: rdf <file>"); return Ok(()) }
-	let mut erroccur = false;
+    if args.len() < 1 {
+        println!("Usage: rdf <file>"); 
+        return Ok(()) 
+    }
 
+	let mut erroccur = false;
 	let mut files: Vec<&str> = vec![];
     for arg in args {
         if !arg.starts_with("-") {
@@ -53,5 +56,9 @@ pub fn rdf(args: &[String]) -> Result<(), String> {
         }
     }
 
-	if erroccur { Err("Creating one or more files failed.".to_string()) } else { Ok(()) }
+	if erroccur { 
+        Err("Reading one or more files failed.".to_string()) 
+    } else {
+        Ok(())
+    }
 }
