@@ -88,7 +88,7 @@ rbox rte myfile.txt
 
 RTE is a Text Editor based on [RobertFlexx's](https://github.com/RobertFlexx) [Trust](https://github.com/RobertFlexx/trust), except more minimal and adapted to RBox.
 
-Its Interface is shell-like and command-based.
+Its Interface is shell-like and command-based. Its commands are listed below.
 
 ---
 ```a``` (Append)
@@ -125,7 +125,7 @@ This command will print helpful text.
 rbox mcd
 ```
 
-This command starts a shell-like process which can start other processes and change its working directory.
+This command starts a shell-like process which can start other processes and change its working directory. Its commands are listed below.
 
 ---
 ```quit```
