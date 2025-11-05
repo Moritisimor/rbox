@@ -2,7 +2,7 @@
 // This was originally made by RobertFlexx but has been adapted for use within RBox by Moritisimor.
 
 use std::fs::{self, OpenOptions};
-use std::io::{self, Write};
+use std::io::{self, Write, stdout};
 use std::path::PathBuf;
 
 struct Editor {
@@ -16,6 +16,9 @@ fn print_help() {
     println!("=> r   --> Read all lines.");
     println!("=> r X --> Read line where X is the number of the line.");
     println!("=> a   --> Append lines. '.' on a line by itself to finish.");
+    println!("=> e   --> Edit line.");
+    println!("=> i   --> Insert line. This command inserts text at the index, incrementing the index of all following lines.");
+    println!("=> d X --> Delete line where X is the number of the line.");
     println!("=> w   --> Write changes to file.");
     println!("=> q   --> Quit.");
     println!("=> q!  --> Force Quit.\n");
@@ -54,12 +57,12 @@ impl Editor {
         Ok(())
     }
 
-    fn edit_lines(&mut self, line: &str) -> Result<(), String> {
+    fn edit_line(&mut self, line: &str) -> Result<(), String> {
         println!("Edit line. Press Enter to apply changes.\n");
         self.read_lines(line.parse::<usize>().ok())?;
 
         println!("Original above ^");
-        println!("(Leave blank to remove) Edit below: ");
+        println!("(Leave blank to cancel) Edit below: ");
         print!("{} | ", line);
         if let Err(err) = io::stdout().flush() {
             eprintln!("Important: Reading from stdin failed!\nError: {err}\nConsider restarting RTE.")
@@ -72,19 +75,43 @@ impl Editor {
             Err(_) => return Err(String::from("Error while converting index to number!"))
         };
 
-        if buf.trim().is_empty() {
-            self.lines.remove(index);
-            return Ok(())
-        }
+        if buf.trim().is_empty() { return Ok(()) }
 
-        match buf.strip_suffix("\n") {
-            None => Err(String::from("Error while stripping line break from input.")),
-            Some(t) => {
-                self.lines.insert(index, t.to_string());
-                self.lines.remove(index - 1);
-                Ok(())
-            }
-        }
+        let text = match buf.strip_suffix("\n") {
+            None => buf,
+            Some(t) => t.to_string()
+        };
+
+        self.lines.insert(index, text);
+        self.lines.remove(index - 1);
+        Ok(())
+    }
+
+    fn delete_line(&mut self, line: usize) -> Result<(), String> {
+        if line > self.lines.len() { return Err("Invalid Index.".to_string()) }
+        self.lines.remove(line - 1);
+        Ok(())
+    }
+
+    fn insert_line(&mut self, line: usize) -> Result<(), String>{
+        if line > self.lines.len() { return Err("Invalid Index.".to_string()) }
+
+        println!("Enter text you want to insert at index {} and press Enter to confirm or leave blank to cancel.", line);
+        print!("{} | ", line);
+        if let Err(err) = stdout().flush() { return Err(err.to_string()) }
+
+        let mut buf = String::new();
+        if let Err(err) = io::stdin().read_line(&mut buf) { return Err(err.to_string()) }
+        
+        let text = match buf.strip_suffix("\n") {
+            None => buf,
+            Some(t) => t.to_string()
+        };
+
+        if text.is_empty() { return Ok(()) }
+        self.lines.insert(line - 1, text);
+
+        Ok(())
     }
 
     fn append_lines(&mut self) -> io::Result<()> {
@@ -191,12 +218,40 @@ pub fn rte(args: &[String]) -> Result<(), String> {
                     None => { eprintln!("Expected value after 'e'."); continue },
                 };
 
-                if let Err(_) = editor.edit_lines(index) { continue }
+                if let Err(err) = editor.edit_line(index) { eprintln!("{err}"); continue }
+            }
+
+            "d" => {
+                let index = match parts.next() {
+                    Some(i) => i,
+                    None => { eprintln!("Expected value after 'e'."); continue },
+                };
+
+                match index.parse::<usize>() {
+                    Err(_) => { eprintln!("Could not parse index to a number."); continue }
+                    Ok(i) => { 
+                        if let Err(err) = editor.delete_line(i) { eprintln!("Error: {err}") }
+                    }
+                }
+            }
+
+            "i" => {
+                let index = match parts.next() {
+                    Some(i) => i,
+                    None => { eprintln!("Expected value after 'i'."); continue }
+                };
+
+                match index.parse::<usize>() {
+                    Err(_) => { eprintln!("Could not parse index to a number."); continue }
+                    Ok(i) => { 
+                        if let Err(err) = editor.insert_line(i) { eprintln!("Error: {err}") }
+                    }
+                }
             }
 
             "w" => { 
-                if let Err(e) = editor.write_file() {
-                    eprintln!("Error: {e}")
+                if let Err(err) = editor.write_file() {
+                    eprintln!("Error: {err}")
                 }
             }
 

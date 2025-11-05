@@ -105,6 +105,16 @@ This command will append text to the end of a file.
 This command will edit a specified line.
 
 ---
+```d``` (Delete)
+
+This command will delete a line.
+
+---
+```i``` (Insert)
+
+This command will insert text into a line, moving all further lines down by one.
+
+---
 ```w``` (Write)
 
 This command will write any changes made to the file.
