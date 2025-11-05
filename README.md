@@ -10,7 +10,11 @@ As I am still pretty new to Rust, code may be unoptimized or not very convention
 It is primarily meant to be a statically compiled, single binary which combines all of its commands. As such, code and dependencies should be minimal, so as to keep the binary itself as small as possible.
 
 ## Current state
-Currently, Rbox is still very early in development and only a few utils have been implemented so far. However, as time goes on, more and more utils will be implemented.
+While RBox is still pretty early in development, it's in a somewhat usable state. Basic file operations work well and the editor is usable too.
+
+### Planned features:
+- Proper SIGTERM-handling
+- Add More commands to RTE for a better text-editing experience
 
 ## Current Commands
 For all commands goes: if an error occurs during execution, it will exit with status code 1 as is proper behaviour.
