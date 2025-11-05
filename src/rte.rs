@@ -54,8 +54,8 @@ impl Editor {
         Ok(())
     }
 
-    fn edit_lines(&mut self, line: &str) -> Result<(), String>{
-        println!("Edit line. Press Enter to apply changes.");
+    fn edit_lines(&mut self, line: &str) -> Result<(), String> {
+        println!("Edit line. Press Enter to apply changes.\n");
         self.read_lines(line.parse::<usize>().ok())?;
 
         println!("Original above ^");

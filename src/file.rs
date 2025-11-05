@@ -1,5 +1,5 @@
 // Create File
-pub fn crtf(args: &[String]) -> Result<(), String>{
+pub fn crtf(args: &[String]) -> Result<(), String> {
     if args.len() < 1 { println!("Usage: ctrf <file>"); return Ok(()) }
     // Not really an error since this may have just been called for the help.
 
@@ -15,8 +15,8 @@ pub fn crtf(args: &[String]) -> Result<(), String>{
     Ok(())
 }
 
-// Delete File
-pub fn delf(args: &[String]) -> Result<(), String> {
+// Remove File
+pub fn rmf(args: &[String]) -> Result<(), String> {
     if args.len() < 1 { println!("Usage: delf <file>"); return Ok(()) }
 
     let mut files: Vec<&str> = vec![];
