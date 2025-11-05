@@ -1,7 +1,10 @@
 use std::io::{Write, stdin, stdout};
 
 // Minimal Command Dispatcher, a very minimal shell-like environment for running commands.
-pub fn mcd() -> Result<(), String>{
+pub fn mcd() -> Result<(), String> {
+    let mut flushes = 0;
+    let mut inputs = 0;
+
     loop {
         match std::env::current_dir() {
             Err(_) => {
@@ -27,14 +30,20 @@ pub fn mcd() -> Result<(), String>{
         print!("MCD >> ");
         if let Err(err) = stdout().flush() {
             println!("Error: {}", err);
+            flushes += 1;
             continue
         }
+
+        if flushes > 4 { return Err("Stdout-Flush attempts bound has been exceeded! Exiting...".to_string()) }
 
         let mut input = String::new();
         if let Err(err) = stdin().read_line(&mut input) {
             println!("Error: {}", err);
+            inputs += 1;
             continue
         }
+
+        if inputs > 4 { return Err("Stdin-Input attempts bound has been exceeded! Exiting...".to_string()) }
 
         let args: Vec<&str> = input.trim().split_whitespace().collect();
         match args[0] {
