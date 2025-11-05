@@ -11,9 +11,7 @@ pub fn mcd() -> Result<(), String>{
                     Some(home) => {
                         match std::env::set_current_dir(home) {
                             Err(err) => return Err(err.to_string()),
-                            Ok(_) => {
-                                println!("Fallback to Home Successful!")
-                            }
+                            Ok(_) => println!("Fallback to Home Successful!") 
                         }
                     }
                 };
@@ -40,6 +38,7 @@ pub fn mcd() -> Result<(), String>{
 
         let args: Vec<&str> = input.trim().split_whitespace().collect();
         match args[0] {
+            "" => { /* Empty input, do nothing. */ }
             "exit" => { println!("Bye!"); return Ok(()) }
             "cd" => {
                 if args.len() < 2 {
@@ -51,8 +50,7 @@ pub fn mcd() -> Result<(), String>{
                     eprintln!("Error: {}", err)
                 }
             }
-            
-            "" => { /* Empty input, do nothing. */ }
+        
             _ => {
                 match std::process::Command::new(args[0]).args(&args[1..]).spawn() {
                     Ok(mut child) => if let Err(err) = child.wait() {

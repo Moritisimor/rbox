@@ -18,6 +18,7 @@ fn main() -> Result<(), String> {
         "rte" => rte::rte(&args[2..]),
         "whereami" => env::whereami(),
         "crtf" => file::crtf(&args[2..]),
+        "delf" => file::delf(&args[2..]),
         "rdf" => file::rdf(&args[2..]),
         "crtd" => dir::crtd(&args[2..]),
         "ls" => dir::ls(&args[2..]),
