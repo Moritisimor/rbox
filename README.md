@@ -13,6 +13,9 @@ It is primarily meant to be a statically compiled, single binary which combines 
 Currently, Rbox is still very early in development and only a few utils have been implemented so far. However, as time goes on, more and more utils will be implemented.
 
 ## Current Commands
+For all commands goes: if an error occurs during execution, it will exit with status code 1 as is proper behaviour.
+
+---
 ```rdf``` (Read File)
 ```console
 rbox rdf myfile.txt
@@ -30,9 +33,16 @@ rbox crtf myfile.txt
 ```
 This command creates one or more files.
 
-Similar behaviour as rdf: If an error occurs while creating, it will skip the entry, print the error and continue. 
+Immediate Exit upon Error.
 
-If an error did occur it will exit with code 1 instead of 0.
+---
+```rmf``` (Remove File)
+```console
+rbox rmd myfile.txt
+```
+This command removes one or more files.
+
+Immediate Exit upon Error.
 
 ---
 ```crtd``` (Create Directory)
@@ -41,9 +51,18 @@ rbox crtd mydirectory
 ```
 This command creates one or more directories.
 
-Similar behaviour as rdf: If an error occurs while creating, it will skip the directory, print the error and continue. 
+Immediate Exit upon Error.
 
-If an error did occur it will exit with code 1 instead of 0.
+---
+```rmd``` (Remove Directory)
+```console
+rbox rmd mydirectory
+```
+This command removes one or more directories.
+
+Immediate Exit upon Error
+
+If a directory happens to have content, it will ask the user for permission to delete recursively.
 
 ---
 ```ls``` (List)
@@ -53,3 +72,69 @@ rbox ls
 This command lists entries in a directory. No parameters means that ls will use the current directory.
 
 It also has an optional ```-a``` flag, which makes it show hidden files (those starting with a '.').
+
+---
+```whereami```
+```console
+rbox whereami
+```
+Basically functionally identical to what most know as ```pwd```. It prints your current Working Directory.
+
+## Special
+### RTE (minimal Rust Text Editor)
+```console
+rbox rte myfile.txt
+```
+
+RTE is a Text Editor based on [RobertFlexx's](https://github.com/RobertFlexx) [Trust](https://github.com/RobertFlexx/trust), except more minimal and adapted to RBox.
+
+Its Interface is shell-like and command-based.
+
+---
+```a``` (Append)
+
+This command will append text to the end of a file.
+
+---
+```e``` (Edit)
+
+This command will edit a specified line.
+
+---
+```w``` (Write)
+
+This command will write any changes made to the file.
+
+---
+```r``` (Read)
+
+This command will read text. Without args it will read the whole file, but you can enter a line as well to read only that specific line.
+
+---
+```q``` (Quit)
+
+This command will quit RTE. You can also use ```q!``` To force quit, discarding any changes.
+
+---
+```h``` (Help)
+
+This command will print helpful text.
+
+### MCD (Minimal Command Dispatcher)
+```console
+rbox mcd
+```
+
+This command starts a shell-like process which can start other processes and change its working directory.
+
+---
+```quit```
+
+Quits MCD.
+
+---
+```cd <Target Directory>```
+
+Changes the current Working Directory of MCD.
+
+###### Note that more commands may always be added in the future.
