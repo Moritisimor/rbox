@@ -17,7 +17,7 @@ pub fn crtf(args: &[String]) -> Result<(), String> {
 
 // Remove File
 pub fn rmf(args: &[String]) -> Result<(), String> {
-    if args.len() < 1 { println!("Usage: delf <file>"); return Ok(()) }
+    if args.len() < 1 { println!("Usage: rmf <file>"); return Ok(()) }
 
     let mut files: Vec<&str> = vec![];
     for arg in args {
