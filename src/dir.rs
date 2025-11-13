@@ -8,7 +8,7 @@ pub fn crtd(args: &[String]) -> Result<(), String> {
 
     let mut dirs: Vec<&str> = vec![];
     for arg in args { 
-        if !arg.starts_with("-") { dirs.push(&arg) } 
+        if !arg.starts_with("-") { dirs.push(&arg) }
     } 
 
     for dir in dirs { 

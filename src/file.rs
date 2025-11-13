@@ -70,3 +70,22 @@ pub fn rdf(args: &[String]) -> Result<(), String> {
         Ok(())
     }
 }
+
+// Move File
+pub fn mve(args: &[String]) -> Result<(), String> {
+    let file = match args.get(0) {
+        None => return Err(String::from("Expected 2 arguments, got 0")),
+        Some(f) => f
+    };
+
+    let new_name = match args.get(1) {
+        None => return Err(String::from("Expected 2 arguments, got 1")),
+        Some(n) => n
+    };
+
+    if let Err(err) = std::fs::rename(file, new_name) {
+        return Err(err.to_string())    
+    }
+    
+    Ok(())
+}

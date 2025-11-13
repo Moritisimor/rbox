@@ -20,6 +20,7 @@ fn main() -> Result<(), String> {
         "crtf" => file::crtf(&args[2..]),
         "rmf" => file::rmf(&args[2..]),
         "rdf" => file::rdf(&args[2..]),
+        "mve" => file::mve(&args[2..]),
         "crtd" => dir::crtd(&args[2..]),
         "rmd" => dir::rmd(&args[2..]),
         "ls" => dir::ls(&args[2..]),
