@@ -1,9 +1,11 @@
-use std::io::{Write, stdin, stdout};
+use rustyline::{DefaultEditor, error::ReadlineError};
 
 // Minimal Command Dispatcher, a very minimal shell-like environment for running commands.
 pub fn mcd() -> Result<(), String> {
-    let mut flushes = 0;
-    let mut inputs = 0;
+    let mut input = match DefaultEditor::new() {
+        Ok(e) => e,
+        Err(err) => return Err(err.to_string())
+    };
 
     loop {
         match std::env::current_dir() {
@@ -21,31 +23,23 @@ pub fn mcd() -> Result<(), String> {
             }
             Ok(cwd) => {
                 match cwd.to_str() {
-                    Some(d) => println!("\n{}", d),
+                    Some(d) => println!("{}", d),
                     None => continue
                 }
             }
         };
 
-        print!("MCD >> ");
-        if let Err(err) = stdout().flush() {
-            println!("Error: {}", err);
-            flushes += 1;
-            continue
-        }
+        let rawline = match input.readline("MCD >> ") {
+            Ok(t) => t,
+            Err(ReadlineError::Interrupted) => {
+                println!("^C");
+                continue
+            }
 
-        if flushes > 4 { return Err("Stdout-Flush attempts bound has been exceeded! Exiting...".to_string()) }
+            Err(e) => return Err(e.to_string())
+        };
 
-        let mut input = String::new();
-        if let Err(err) = stdin().read_line(&mut input) {
-            println!("Error: {}", err);
-            inputs += 1;
-            continue
-        }
-
-        if inputs > 4 { return Err("Stdin-Input attempts bound has been exceeded! Exiting...".to_string()) }
-
-        let args: Vec<&str> = input.trim().split_whitespace().collect();
+        let args: Vec<&str> = rawline.split_whitespace().collect();
         match args[0] {
             "" => { /* Empty input, do nothing. */ }
             "exit" => { println!("Bye!"); return Ok(()) }
@@ -56,16 +50,14 @@ pub fn mcd() -> Result<(), String> {
                 }
 
                 if let Err(err) = std::env::set_current_dir(args[1]) {
-                    eprintln!("Error: {}", err)
+                    eprintln!("{}", err.to_string())
                 }
             }
         
             _ => {
                 match std::process::Command::new(args[0]).args(&args[1..]).spawn() {
-                    Ok(mut child) => if let Err(err) = child.wait() {
-                        eprintln!("Error: {}", err)
-                    }
-                    Err(err) => { eprintln!("An error has occurred! Error: {}", err) }
+                    Ok(mut child) => if let Err(err) = child.wait() { eprintln!("{}", err.to_string()) }
+                    Err(err) => eprintln!("{}", err.to_string())
                 }
             }
         }

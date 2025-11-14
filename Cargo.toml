@@ -11,3 +11,4 @@ strip = true
 panic = "abort"
 
 [dependencies]
+rustyline = "17"
