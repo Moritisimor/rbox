@@ -89,3 +89,22 @@ pub fn mve(args: &[String]) -> Result<(), String> {
     
     Ok(())
 }
+
+pub fn cpy(args: &[String]) -> Result<(), String> {
+    let og = match args.get(0) {
+        None => return Err(String::from("Expected 2 arguments, got 0")),
+        Some(o) => o
+    };
+
+    let new = match args.get(1) {
+        None => return Err(String::from("Expected 2 arguments, got 1")),
+        Some(n) => n
+    };
+
+    if let Err(err) = std::fs::copy(og, new) {
+        return Err(err.to_string())
+    }
+    
+    Ok(())
+}
+
