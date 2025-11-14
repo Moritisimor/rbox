@@ -20,7 +20,7 @@ pub fn crtd(args: &[String]) -> Result<(), String> {
 
 // Remove Directory
 pub fn rmd(args: &[String]) -> Result<(), String> {
-    if args.len() < 1 { println!("Usage: deld <directory>"); return Ok(()) }
+    if args.len() < 1 { println!("Usage: rmd <directory>"); return Ok(()) }
 
     let mut dirs: Vec<&str> = vec![];
     for arg in args {
@@ -42,9 +42,9 @@ pub fn rmd(args: &[String]) -> Result<(), String> {
             if ans.trim().to_lowercase() != "y" {
                 continue
             }
-
-            if let Err(err) = std::fs::remove_dir_all(dir) { return Err(err.to_string()) }
         }
+
+        if let Err(err) = std::fs::remove_dir_all(dir) { return Err(err.to_string()) }
     }
 
     Ok(())
