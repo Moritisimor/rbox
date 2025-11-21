@@ -3,6 +3,7 @@ mod dir;
 mod env;
 mod mcd;
 mod rte;
+mod rbp;
 pub mod internals;
 
 /* 
@@ -15,6 +16,7 @@ fn main() -> Result<(), String> {
     if args.len() < 2 { println!("Usage: rbox <command> <options...>"); return Ok(()) }
 
     match args[1].trim() {
+        "rbp" => rbp::rbp(&args[2..]),
         "rte" => rte::rte(&args[2..]),
         "whereami" => env::whereami(),
         "crtf" => file::crtf(&args[2..]),
